@@ -37,7 +37,19 @@ public class RecipesRepository(IDbConnection db) : IRepository<Recipe>
 
     public List<Recipe> GetAll()
     {
-        throw new NotImplementedException();
+        string sql = @"
+        SELECT
+        recipes.*,
+        accounts.*
+        FROM recipes
+        JOIN accounts ON recipes.creatorID = accounts.id;
+        ";
+        List<Recipe> recipes = db.Query<Recipe, Account, Recipe>(sql, (recipe, account) =>
+        {
+            recipe.Creator = account;
+            return recipe;
+        }).ToList();
+        return recipes;
     }
 
     public Recipe GetById(int id)
