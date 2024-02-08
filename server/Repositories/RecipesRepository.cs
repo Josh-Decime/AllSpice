@@ -30,9 +30,13 @@ public class RecipesRepository(IDbConnection db) : IRepository<Recipe>
         return recipe;
     }
 
-    public void Delete(int id)
+    public void Delete(int recipeId)
     {
-        throw new NotImplementedException();
+        string sql = @"
+        DELETE FROM recipes
+        WHERE id = @recipeId;
+        ";
+        db.Execute(sql, new { recipeId });
     }
 
     public List<Recipe> GetAll()
@@ -72,6 +76,26 @@ public class RecipesRepository(IDbConnection db) : IRepository<Recipe>
 
     public Recipe Update(Recipe updateData)
     {
-        throw new NotImplementedException();
+        string sql = @"
+        UPDATE recipes SET
+        title = @title,
+        instructions = @instructions,
+        img = @img,
+        category = @category
+        WHERE id = @id;
+
+        SELECT
+            recipes.*,
+            accounts.*
+        FROM recipes
+        JOIN accounts ON recipes.creatorId = accounts.id
+        WHERE recipes.id = @id;
+       ";
+        Recipe recipe = db.Query<Recipe, Account, Recipe>(sql, (recipe, account) =>
+        {
+            recipe.Creator = account;
+            return recipe;
+        }, updateData).FirstOrDefault();
+        return recipe;
     }
 }

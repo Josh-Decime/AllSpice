@@ -59,5 +59,34 @@ public class RecipesController : ControllerBase
         }
     }
 
+    [HttpPut("{recipeId}")]
+    public ActionResult<Recipe> Update([FromBody] Recipe updateData, int recipeId)
+    {
+        try
+        {
+            updateData.Id = recipeId;
+            Recipe update = recipesService.Update(updateData);
+            return Ok(update);
+        }
+        catch (Exception error)
+        {
+            return BadRequest(error.Message);
+        }
+    }
+
+    [HttpDelete("{recipeId}")]
+    public ActionResult<string> Delete(int recipeId)
+    {
+        try
+        {
+            string message = recipesService.Delete(recipeId);
+            return Ok(message);
+        }
+        catch (Exception error)
+        {
+            return BadRequest(error.Message);
+        }
+    }
+
 
 }

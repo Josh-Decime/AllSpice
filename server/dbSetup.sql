@@ -30,3 +30,14 @@ SELECT recipes.*,
 FROM recipes
   JOIN accounts ON recipes.creatorId = accounts.id
 WHERE recipes.id = LAST_INSERT_ID();
+UPDATE recipes
+SET title = @title,
+  instructions = @instructions,
+  img = @img,
+  category = @category
+WHERE id = @id;
+SELECT recipes.*,
+  accounts.*
+FROM recipes
+  JOIN accounts ON recipes.creatorId = accounts.id
+WHERE recipes.id = @id;

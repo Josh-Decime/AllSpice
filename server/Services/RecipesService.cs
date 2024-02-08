@@ -26,4 +26,24 @@ public class RecipesService(RecipesRepository repo)
         if (recipe == null) throw new Exception($"No recipe at id: {recipeId}");
         return recipe;
     }
+
+    internal Recipe Update(Recipe updateData)
+    {
+        Recipe original = GetById(updateData.Id);
+
+        original.Title = updateData.Title ?? original.Title;
+        original.Instructions = updateData.Instructions ?? original.Instructions;
+        original.Img = updateData.Img ?? original.Img;
+        original.Category = updateData.Category ?? original.Category;
+
+        Recipe update = repo.Update(original);
+        return update;
+    }
+
+    internal string Delete(int recipeId)
+    {
+        Recipe original = GetById(recipeId);
+        repo.Delete(recipeId);
+        return $"{original.Title} has been deleted!";
+    }
 }
