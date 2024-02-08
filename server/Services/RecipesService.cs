@@ -1,4 +1,5 @@
 
+
 namespace AllSpice.Services;
 
 public class RecipesService(RecipesRepository repo)
@@ -17,5 +18,12 @@ public class RecipesService(RecipesRepository repo)
     {
         List<Recipe> recipes = repo.GetAll();
         return recipes;
+    }
+
+    internal Recipe GetById(int recipeId)
+    {
+        Recipe recipe = repo.GetById(recipeId);
+        if (recipe == null) throw new Exception($"No recipe at id: {recipeId}");
+        return recipe;
     }
 }

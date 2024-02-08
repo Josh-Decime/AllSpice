@@ -31,6 +31,20 @@ public class RecipesController : ControllerBase
         }
     }
 
+    [HttpGet("{recipeId}")]
+    public ActionResult<Recipe> GetById(int recipeId)
+    {
+        try
+        {
+            Recipe recipe = recipesService.GetById(recipeId);
+            return Ok(recipe);
+        }
+        catch (Exception error)
+        {
+            return BadRequest(error.Message);
+        }
+    }
+
     [HttpGet]
     public ActionResult<List<Recipe>> GetAll()
     {

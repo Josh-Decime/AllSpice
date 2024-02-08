@@ -52,9 +52,22 @@ public class RecipesRepository(IDbConnection db) : IRepository<Recipe>
         return recipes;
     }
 
-    public Recipe GetById(int id)
+    public Recipe GetById(int recipesId)
     {
-        throw new NotImplementedException();
+        string sql = @"
+        SELECT
+        recipes.*,
+        accounts.*
+        FROM recipes
+        JOIN accounts ON recipes.creatorId = accounts.id
+        WHERE recipes.id = @recipesId;
+        ";
+        Recipe recipe = db.Query<Recipe, Account, Recipe>(sql, (recipe, account) =>
+        {
+            recipe.Creator = account;
+            return recipe;
+        }, new { recipesId }).FirstOrDefault();
+        return recipe;
     }
 
     public Recipe Update(Recipe updateData)
