@@ -16,14 +16,11 @@ public class IngredientsController : ControllerBase
 
     [HttpPost]
     [Authorize]
-    // TODO would be nice to have an authorization check
     public async Task<ActionResult<Ingredient>> Create([FromBody] Ingredient ingredientData)
     {
         try
         {
             Account userInfo = await auth.GetUserInfoAsync<Account>(HttpContext);
-            // creatorId = recipesService.GetById(ingredientData.RecipeId)
-            // ingredientData.RecipeId = userInfo.Id;
             Ingredient ingredient = ingredientsService.Create(ingredientData, userInfo.Id);
             return Ok(ingredient);
         }
@@ -32,5 +29,23 @@ public class IngredientsController : ControllerBase
             return BadRequest(error.Message);
         }
     }
+
+    [HttpDelete("{ingredientId}")]
+    [Authorize]
+    public async Task<ActionResult<string>> DeleteIngredient(int ingredientId)
+    {
+        try
+        {
+            Account userInfo = await auth.GetUserInfoAsync<Account>(HttpContext);
+            string message = ingredientsService.DeleteIngredient(ingredientId, userInfo.Id);
+            return Ok(message);
+        }
+        catch (Exception error)
+        {
+            return BadRequest(error.Message);
+        }
+    }
+
+
 
 }

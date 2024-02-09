@@ -6,10 +6,12 @@ public class RecipesController : ControllerBase
 {
     private readonly RecipesService recipesService;
     private readonly Auth0Provider auth;
-    public RecipesController(Auth0Provider auth, RecipesService recipesService)
+    private readonly IngredientsService ingredientsService;
+    public RecipesController(Auth0Provider auth, RecipesService recipesService, IngredientsService ingredientsService)
     {
         this.auth = auth;
         this.recipesService = recipesService;
+        this.ingredientsService = ingredientsService;
     }
 
     // ---------------------------------------
@@ -81,6 +83,20 @@ public class RecipesController : ControllerBase
         {
             string message = recipesService.Delete(recipeId);
             return Ok(message);
+        }
+        catch (Exception error)
+        {
+            return BadRequest(error.Message);
+        }
+    }
+
+    [HttpGet("{recipeId}/ingredients")]
+    public ActionResult<List<Ingredient>> getIngredientByRecipeId(int recipeId)
+    {
+        try
+        {
+            List<Ingredient> ingredient = ingredientsService.getIngredientByRecipeId(recipeId);
+            return Ok(ingredient);
         }
         catch (Exception error)
         {

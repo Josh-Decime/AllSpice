@@ -16,4 +16,10 @@ public class IngredientsService(IngredientsRepository repo, RecipesService recip
         }
         return repo.Create(data);
     }
+
+    internal List<Ingredient> getIngredientByRecipeId(int recipeId)
+    {
+        List<Ingredient> ingredient = repo.getIngredientByRecipeId(recipeId);
+        return ingredient;
+    }
 }
