@@ -7,8 +7,10 @@ CREATE TABLE IF NOT EXISTS accounts(
   picture varchar(255) COMMENT 'User Picture'
 ) default charset utf8mb4 COMMENT '';
 drop table if EXISTS accounts;
-CREATE TABLE recipes(
+CREATE TABLE IF NOT EXISTS recipes(
   id INT AUTO_INCREMENT PRIMARY KEY,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
   title VARCHAR(50) Not Null,
   instructions VARCHAR(1500) NOT NULL,
   img VARCHAR(500) NOT NULL,
@@ -17,36 +19,23 @@ CREATE TABLE recipes(
   FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8mb4 COMMENT '';
 drop Table if EXISTS recipes;
-INSERT INTO recipes (title, instructions, img, category, creatorId)
-VALUES (
-    @title,
-    @instructions,
-    @img,
-    @category,
-    @creatorId
-  );
-SELECT recipes.*,
-  accounts.*
-FROM recipes
-  JOIN accounts ON recipes.creatorId = accounts.id
-WHERE recipes.id = LAST_INSERT_ID();
-UPDATE recipes
-SET title = @title,
-  instructions = @instructions,
-  img = @img,
-  category = @category
-WHERE id = @id;
-SELECT recipes.*,
-  accounts.*
-FROM recipes
-  JOIN accounts ON recipes.creatorId = accounts.id
-WHERE recipes.id = @id;
-CREATE TABLE ingredients(
+CREATE TABLE IF NOT EXISTS ingredients(
   id INT AUTO_INCREMENT PRIMARY KEY,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
   name VARCHAR(50) NOT NULL,
   quantity VARCHAR(25) NOT NULL,
   recipeId INT NOT NULL,
   creatorId VARCHAR(255) NOT NULL,
   FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE,
   FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
+) default charset utf8mb4 COMMENT '';
+CREATE TABLE IF NOT EXISTS favorites(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  createdAt DATETIME DEFAULT CURRENT_TIMESTAMP COMMENT 'Time Created',
+  updatedAt DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Last Update',
+  accountId VARCHAR(255) NOT NULL,
+  recipeId INT NOT NULL,
+  FOREIGN KEY (accountId) REFERENCES accounts(id) ON DELETE CASCADE,
+  FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE
 ) default charset utf8mb4 COMMENT '';
