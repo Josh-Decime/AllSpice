@@ -14,6 +14,6 @@ public class IngredientsService(IngredientsRepository repo, RecipesService recip
         {
             throw new Exception("You can not do that");
         }
-        return IngredientsRepository.Create(data);
+        return repo.Create(data);
     }
 }

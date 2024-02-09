@@ -41,3 +41,10 @@ SELECT recipes.*,
 FROM recipes
   JOIN accounts ON recipes.creatorId = accounts.id
 WHERE recipes.id = @id;
+CREATE TABLE ingredients(
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(50) NOT NULL,
+  quantity VARCHAR(25) NOT NULL,
+  recipeId INT NOT NULL,
+  FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE
+) default charset utf8mb4 COMMENT '';

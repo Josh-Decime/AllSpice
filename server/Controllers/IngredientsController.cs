@@ -6,12 +6,10 @@ public class IngredientsController : ControllerBase
 {
     private readonly IngredientsService ingredientsService;
     private readonly Auth0Provider auth;
-    // private readonly RecipesService recipesService;
     public IngredientsController(IngredientsService ingredientsService, Auth0Provider auth)
     {
         this.ingredientsService = ingredientsService;
         this.auth = auth;
-        // this.recipesService = recipesService;
     }
 
     // ------------------------------------------------------------------------------------
