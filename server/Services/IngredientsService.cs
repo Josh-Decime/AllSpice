@@ -22,4 +22,13 @@ public class IngredientsService(IngredientsRepository repo, RecipesService recip
         List<Ingredient> ingredient = repo.getIngredientByRecipeId(recipeId);
         return ingredient;
     }
+
+    internal string DeleteIngredient(int ingredientId, string userId)
+    {
+        Ingredient original = repo.GetIngredientById(ingredientId);
+        if (original.creatorID != userId) throw new Exception("Not your ingredient to delete!");
+
+        repo.DeleteIngredient(ingredientId);
+        return $"{original.Name} has been deleted";
+    }
 }

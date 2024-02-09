@@ -1,5 +1,6 @@
 
 
+
 namespace AllSpice.Repositories;
 
 public class IngredientsRepository(IDbConnection db)
@@ -14,9 +15,9 @@ public class IngredientsRepository(IDbConnection db)
     {
         string sql = @"
        INSERT INTO ingredients
-       (name, quantity, recipeId)
+       (name, quantity, recipeId, creatorId)
        VALUES
-       (@name, @quantity, @recipeId);
+       (@name, @quantity, @recipeId, @creatorId);
 
        SELECT
         ingredients.*,
@@ -43,5 +44,26 @@ public class IngredientsRepository(IDbConnection db)
         ";
         List<Ingredient> ingredients = db.Query<Ingredient>(sql, new { recipeId }).ToList();
         return ingredients;
+    }
+
+    public Ingredient GetIngredientById(int ingredientId)
+    {
+        string sql = @"
+        SELECT
+        ingredients.*
+        FROM ingredients
+        WHERE ingredients.id = @ingredientId;
+        ";
+        Ingredient ingredient = db.Query<Ingredient>(sql, new { ingredientId }).FirstOrDefault();
+        return ingredient;
+    }
+
+    internal void DeleteIngredient(int ingredientId)
+    {
+        string sql = @"
+        DELETE FROM ingredients
+        WHERE ingredients.id = @ingredientId;
+        ";
+        db.Execute(sql, new { ingredientId });
     }
 }

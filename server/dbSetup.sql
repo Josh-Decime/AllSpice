@@ -46,5 +46,7 @@ CREATE TABLE ingredients(
   name VARCHAR(50) NOT NULL,
   quantity VARCHAR(25) NOT NULL,
   recipeId INT NOT NULL,
-  FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE
+  creatorId VARCHAR(255) NOT NULL,
+  FOREIGN KEY (recipeId) REFERENCES recipes(id) ON DELETE CASCADE,
+  FOREIGN KEY (creatorId) REFERENCES accounts(id) ON DELETE CASCADE
 ) default charset utf8mb4 COMMENT '';
