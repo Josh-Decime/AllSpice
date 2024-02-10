@@ -22,7 +22,7 @@ public class IngredientsRepository(IDbConnection db)
        SELECT
         ingredients.*,
         recipes.*
-       FROM ingredients
+       FROM ingredients 
        JOIN recipes ON ingredients.recipeId = recipes.id
        WHERE ingredients.id = LAST_INSERT_ID();
        ";

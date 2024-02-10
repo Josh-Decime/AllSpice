@@ -1,10 +1,35 @@
+
 namespace AllSpice.Repositories;
 
 public class FavoritesRepository(IDbConnection db)
 {
     private readonly IDbConnection db = db;
 
+
     // ----------------------------------------------------------
 
+    internal FavoriteRecipe CreateFavorite(Favorite favoriteData)
+    {
+        string sql = @"
+        INSERT INTO favorites
+        (accountId, recipeId)
+        VALUES
+        (@accountId, @recipeId);
+
+        SELECT
+        favorites.*,
+        recipes.*
+        FROM favorites
+        JOIN recipes ON favorites.recipeId = recipes.id
+        WHERE favorites.id = LAST_INSERT_ID();
+        ";
+        FavoriteRecipe favoriteRecipe = db.Query<Favorite, FavoriteRecipe, FavoriteRecipe>(sql, (favorite, recipe) =>
+        {
+            // favorite.RecipeId = recipe.CreatorId;
+            recipe.FavoriteId = favorite.Id;
+            return recipe;
+        }, favoriteData).FirstOrDefault();
+        return favoriteRecipe;
+    }
 
 }
