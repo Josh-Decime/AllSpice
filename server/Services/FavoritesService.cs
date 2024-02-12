@@ -1,4 +1,6 @@
 
+
+
 namespace AllSpice.Services;
 
 public class FavoritesService(FavoritesRepository repo)
@@ -14,5 +16,14 @@ public class FavoritesService(FavoritesRepository repo)
         return favoriteRecipe;
     }
 
+    internal string DeleteFavorite(int favoriteId, string id)
+    {
+        throw new NotImplementedException();
+    }
 
+    internal List<FavoriteRecipe> GetAccountFavoriteRecipes(string userId)
+    {
+        List<FavoriteRecipe> favoriteRecipes = repo.GetAccountFavoriteRecipes(userId);
+        return favoriteRecipes;
+    }
 }

@@ -104,6 +104,17 @@ public class RecipesController : ControllerBase
         }
     }
 
+    // [HttpGet("{recipeId}/favorites")]
+    // public ActionResult<List<FavoriteRecipe>> GetAccountFavoriteRecipes(int recipeId){
+    //     try
+    //     {
+    //         List<FavoriteRecipe> 
+    //     }
+    //     catch (Exception error)
+    //     {
+    //         return BadRequest(error.Message);
+    //     }
+    // }
 
 
 }
