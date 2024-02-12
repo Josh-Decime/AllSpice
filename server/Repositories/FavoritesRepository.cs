@@ -1,5 +1,6 @@
 
 
+
 namespace AllSpice.Repositories;
 
 public class FavoritesRepository(IDbConnection db)
@@ -49,5 +50,25 @@ public class FavoritesRepository(IDbConnection db)
             return favoriteRecipe;
         }, new { userId }).ToList();
         return favoriteRecipes;
+    }
+
+    public Favorite GetFavoriteById(int favoriteId)
+    {
+        string sql = @"
+        SELECT
+        *
+        FROM favorites
+        WHERE id = @favoriteId;
+        ";
+        Favorite favorite = db.Query<Favorite>(sql, new { favoriteId }).FirstOrDefault();
+        return favorite;
+    }
+
+    internal void Delete(int favoriteId)
+    {
+        string sql = @"
+        DELETE FROM favorites WHERE id = @favoriteId
+        ";
+        db.Execute(sql, new { favoriteId });
     }
 }

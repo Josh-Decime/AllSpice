@@ -16,9 +16,13 @@ public class FavoritesService(FavoritesRepository repo)
         return favoriteRecipe;
     }
 
-    internal string DeleteFavorite(int favoriteId, string id)
+    internal string DeleteFavorite(int favoriteId, string userId)
     {
-        throw new NotImplementedException();
+        Favorite original = repo.GetFavoriteById(favoriteId);
+        if (original == null) throw new Exception($"No favorite at id: {favoriteId}");
+        if (original.AccountId != userId) throw new Exception("Not yours to delete");
+        repo.Delete(favoriteId);
+        return $"{favoriteId} was deleted";
     }
 
     internal List<FavoriteRecipe> GetAccountFavoriteRecipes(string userId)
