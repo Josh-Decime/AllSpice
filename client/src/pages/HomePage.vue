@@ -8,15 +8,39 @@
       </h1>
     </div>
   </div> -->
+
+  <section class="row">
+    <div v-for="recipe in recipes" class="col-12 col-md-4">
+      <RecipeCard :recipe="recipe" />
+    </div>
+  </section>
 </template>
 
 <script>
+import { computed, onMounted } from 'vue';
+import { AppState } from '../AppState.js';
+import Pop from '../utils/Pop.js';
+import { recipesService } from '../services/RecipesService.js'
+import RecipeCard from '../components/RecipeCard.vue';
+
 export default {
   setup() {
-    return {
-
+    onMounted(() => {
+      getAllRecipes();
+    });
+    async function getAllRecipes() {
+      try {
+        await recipesService.getAllRecipes();
+      }
+      catch (error) {
+        Pop.error(error);
+      }
     }
-  }
+    return {
+      recipes: computed(() => { return AppState.recipes; })
+    };
+  },
+  components: { RecipeCard }
 }
 </script>
 
