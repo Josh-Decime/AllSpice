@@ -6,8 +6,22 @@ import { api } from "./AxiosService.js";
 class RecipesService {
     async getAllRecipes() {
         const response = await api.get('api/recipes')
-        logger.log('response data:', response.data)
-        AppState.recipes = response.data.map(recipe => new Recipe(recipe))
+        logger.log('All Recipe response data:', response.data)
+        AppState.allRecipes = response.data.map(recipe => new Recipe(recipe))
+    }
+
+    async getMyRecipes() {
+        // let response = await api.get('account/recipes')
+        // logger.log('My Recipe response data:', response.data)
+        // AppState.myRecipes = response.data.map(recipe => new Recipe(recipe))
+        // AppState.myRecipes = AppState.allRecipes.FindAll(recipe => recipe.creatorId == AppState.account.id)
+    }
+
+    async activeRecipe(recipeId) {
+        let response = await api.get(`api/recipes/${recipeId}`)
+        let activeRecipe = new Recipe(response.data)
+        AppState.activeRecipe = activeRecipe
+        logger.log('active recipe:', AppState.activeRecipe)
     }
 }
 

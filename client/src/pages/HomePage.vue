@@ -8,9 +8,14 @@
       </h1>
     </div>
   </div> -->
+  <section>
+    <button @click="getAllRecipes()">All Recipes</button>
+    <button>My Recipes</button>
+    <button>Favorites</button>
+  </section>
 
   <section class="row">
-    <div v-for="recipe in recipes" class="col-12 col-md-4">
+    <div v-for="recipe in allRecipes" class="col-12 col-md-4">
       <RecipeCard :recipe="recipe" />
     </div>
   </section>
@@ -26,7 +31,8 @@ import RecipeCard from '../components/RecipeCard.vue';
 export default {
   setup() {
     onMounted(() => {
-      getAllRecipes();
+      getAllRecipes(),
+        getMyRecipes()
     });
     async function getAllRecipes() {
       try {
@@ -36,8 +42,20 @@ export default {
         Pop.error(error);
       }
     }
+
+    async function getMyRecipes() {
+      try {
+        await recipesService.getMyRecipes();
+      }
+      catch (error) {
+        Pop.error(error)
+      }
+    }
+
+
     return {
-      recipes: computed(() => { return AppState.recipes; })
+      allRecipes: computed(() => { return AppState.allRecipes; }),
+
     };
   },
   components: { RecipeCard }
