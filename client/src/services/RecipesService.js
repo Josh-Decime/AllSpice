@@ -17,7 +17,7 @@ class RecipesService {
         // AppState.myRecipes = AppState.allRecipes.FindAll(recipe => recipe.creatorId == AppState.account.id)
     }
 
-    async activeRecipe(recipeId) {
+    async getActiveRecipe(recipeId) {
         let response = await api.get(`api/recipes/${recipeId}`)
         let activeRecipe = new Recipe(response.data)
         AppState.activeRecipe = activeRecipe

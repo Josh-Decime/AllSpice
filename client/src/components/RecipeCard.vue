@@ -1,5 +1,5 @@
 <template>
-    <section @click="activeRecipe()" data-bs-toggle="modal" data-bs-target="#recipeModal">
+    <section @click="getActiveRecipe()" data-bs-toggle="modal" data-bs-target="#recipeModal">
         <section class="row m-2 rounded imgScaling selectable" :style="{ backgroundImage: `url(${recipe.img})` }">
             <div class="d-flex justify-content-between mt-2">
                 <div class="textBackdropBlurRound">{{ recipe.category }}</div>
@@ -13,23 +13,34 @@
 
 
     <!-- Modal -->
-    <div class="modal fade" id="recipeModal" tabindex="-1" aria-labelledby="recipeModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="recipeModalLabel">Modal title</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    ...
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+    <section v-if="activeRecipe">
+        <div class="modal fade" id="recipeModal" tabindex="-1" aria-labelledby="recipeModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="recipeModalLabel">{{ activeRecipe.title }}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <section class="col-6">
+                                <img :src="`${activeRecipe.img}`" :alt="`Image of ${activeRecipe.title}`" class="img-fluid">
+                                <p>{{ activeRecipe.instructions }}</p>
+                            </section>
+                            <section class="col-6">
+
+                            </section>
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <!-- <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Save changes</button> -->
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 </template>
 
 
@@ -39,18 +50,24 @@ import { computed, ref, onMounted } from 'vue';
 import { Recipe } from '../models/Recipe.js';
 import { recipesService } from '../services/RecipesService.js';
 export default {
-    props: { recipe: { type: Recipe, required: true } },
+    props: { recipe: { type: Recipe, required: true }, activeRecipe: { type: Recipe } },
 
 
     setup(props) {
 
-        async function activeRecipe() {
-            await recipesService.activeRecipe(props.recipe.id)
+        async function getActiveRecipe() {
+            await recipesService.getActiveRecipe(props.recipe.id)
+        }
+
+        async function getIngredients() {
+
         }
 
 
         return {
-            activeRecipe,
+            getActiveRecipe,
+            activeRecipe: computed(() => AppState.activeRecipe)
+
         }
     }
 };
